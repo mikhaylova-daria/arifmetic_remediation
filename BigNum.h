@@ -146,6 +146,10 @@ using namespace std;
 
             }
         free(buf);
+        if (this->num.size_of_vector() == 0) {
+            this->num.push_back(0);
+        }
+        this->is_null();
         return;
     }
 
@@ -271,6 +275,10 @@ using namespace std;
 
             }
         free(buf);
+        if (this->num.size_of_vector() == 0) {
+            this->num.push_back(0);
+        }
+        this->is_null();
         return;
     }
 
@@ -339,24 +347,28 @@ using namespace std;
     }
 
     //ВОЗВРАЩАЕТ МИНИМУМ ПО МОДУЛЮ
-    BigNum BigNum::min_size (BigNum a, BigNum b) {
+    BigNum BigNum::min_size (BigNum *_a, BigNum *_b) {
+        BigNum a(*_a);
+        BigNum b(*_b);
         a.sign = true;
         b.sign = true;
         if (a >= b) {
-            return b;
+            return *_b;
         } else {
-            return a;
+            return *_a;
         }
     }
 
     //ВОЗВРАЩАЕТ МАКСИМУМ ПО МОДУЛЮ
-    BigNum BigNum::max_size (BigNum a, BigNum b) {   // по модулю!!!!!!
+    BigNum BigNum::max_size (BigNum *_a, BigNum *_b) {   // по модулю!!!!!!
+        BigNum a (*_a);
+        BigNum b(*_b);
         a.sign = true;
         b.sign = true;
         if (a <= b) {
-            return b;
+            return *_b;
         } else {
-            return a;
+            return *_a;
         }
      }
 
@@ -371,10 +383,23 @@ using namespace std;
         return;
     }
 
+
+    //ОБРАБОТКА НУЛЯ
+
+    bool BigNum::is_null() {
+        if (this->num.size_of_vector() == 1){
+            if (this->num[0] == 0){
+                this->sign = true;
+            }
+            return true;
+        }
+        return false;
+    }
+
    //СЛОЖЕНИЕ
     BigNum  BigNum::operator + (BigNum a) {
-        BigNum min_abs = min_size (*this, a); // минимальный по модулю
-        BigNum max_abs = max_size(*this, a);// максимальный по модулю
+        BigNum min_abs = min_size (this, &a); // минимальный по модулю
+        BigNum max_abs = max_size(this, &a);// максимальный по модулю
         int min = min_abs.num.size_of_vector();
         int max = max_abs.num.size_of_vector();
         if ((min == 0)|| (max == 0)) {
@@ -401,11 +426,11 @@ using namespace std;
            }
         } else {                            //если знаки разные - вычитаем: ищем разницу абсолютных значений
                                            //и определяем знак результата
-            max_abs.sign = true;
-            min_abs.sign = true;
+
             sum = dif(max_abs, min_abs);
             sum.sign = max_abs.sign;
         }
+        sum.is_null();
         return sum;
     }
 
@@ -433,10 +458,21 @@ using namespace std;
         if (difference.num.size_of_vector() == 0) {
             difference.num.push_back(0);
         }
+        difference.is_null();
         return difference;
     }
 
 
+
+    //  ВЫЧИТАНИЕ
+
+    BigNum BigNum::operator - (BigNum a) {
+            BigNum difference;
+            a.sign = !(a.sign);
+            difference = *this + a;
+            difference.is_null();
+        return difference;
+    }
 
   // ОПЕРАТОР ПРИСВАИВАНИЯ
 

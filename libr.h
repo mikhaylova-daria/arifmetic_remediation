@@ -64,14 +64,15 @@ public:
     void output();
     void foutput();
     void foutput(FILE*);
-    BigNum min_size (BigNum a, BigNum b);
-    BigNum max_size (BigNum a, BigNum b);
+    BigNum min_size (BigNum *a, BigNum *b);
+    BigNum max_size (BigNum *a, BigNum *b);
     void remove_null ();
     BigNum Karatsuba(BigNum a);
     friend BigNum dif (BigNum, BigNum );
     BigNum power(int);
     BigNum power(BigNum);
     BigNum sqrt();          //целая часть от квадратного коряня
+    bool is_null();  //убирает - у нуля,+ если число ноль - истина,  нет - ложь
     BigNum operator + (BigNum a);
     BigNum operator -(BigNum a);
     BigNum operator * (SMALLNUM a);
@@ -93,6 +94,9 @@ struct Q_Num {
     BigNum numerator;
     BigNum denominator;
 };
+BigNum null(0);
+my::vector<int> null_v;
+
 
 #include "Vector.h"
 #include "BigNum.h"

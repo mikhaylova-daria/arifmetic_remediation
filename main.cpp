@@ -2,6 +2,7 @@
 
 int main()
 {
+    null_v.push_back(0);
     FILE* fp =fopen("INPUT.TXT","r");
     BigNum a;
     BigNum b;
@@ -10,8 +11,8 @@ int main()
     b.finput(fp);
     a.output();
     b.output();
+    c = a - b;
    // c = a + b;
-    c = dif(a, b);
     c.output();
     return 0;
 

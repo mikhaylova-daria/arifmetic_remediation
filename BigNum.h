@@ -474,6 +474,54 @@ using namespace std;
         return difference;
     }
 
+    //  УМНОЖЕНИЕ НА НЕБОЛЬШОЕ
+    BigNum BigNum::operator * (SMALLNUM a){
+
+        BigNum product;
+        if (this->sign == false){
+                product.sign = false;
+        }
+        int buf = 0;
+        int n = this->num.size_of_vector();
+        for (int i = 0; i < n; ++i) {
+            int x = this->num[i] * a + buf;
+            buf = x / radix;
+            product.num.push_back(x % radix);
+        }
+        if (buf != 0) {
+            product.num.push_back(buf);
+        }
+        product.remove_null();
+        product.is_null();
+        return product;
+    }
+
+//УМНОЖЕНИЕ НА ДЛИННОЕ
+    BigNum BigNum::operator * (BigNum a) {
+        BigNum product;
+        if (a.sign != this -> sign) {
+            product.sign =false;
+        }
+        product.num.push_back(0);
+        BigNum max = max_size(this, &a);
+        BigNum min = min_size(this, &a);
+        int n = min.num.size_of_vector();
+        product = (max * (int) min.num[0]);
+        for (int i = 1; i < n; ++i) {
+            BigNum x = (max * (int) min.num[i]);
+            for (int j = 0; j < i; ++j ){
+                for (int f = 0; f < radix_size; ++f){
+                     x = x * X;
+                }
+            }
+            product = product + x;
+        }
+        product.remove_null();
+        product.is_null();
+        return product;
+    }
+
+
   // ОПЕРАТОР ПРИСВАИВАНИЯ
 
     void BigNum::operator = (BigNum a){

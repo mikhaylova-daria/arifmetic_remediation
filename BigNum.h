@@ -396,11 +396,17 @@ using namespace std;
 
     bool BigNum::is_null() {
         bool answer = false;
-        if (this->num.size_of_vector() == 1){
+        int this_size = this->num.size_of_vector();
+        if (this_size == 1){
             if (this->num[0] == 0){
                 this->sign = true;
                 answer = true;
             }
+        }
+        if (this_size == 0) {
+            this->sign = true;
+            this->num.push_back(0);
+            answer = true;
         }
         return answer;
     }
@@ -825,7 +831,56 @@ using namespace std;
     }
 
 
-
+    BigNum BigNum::Karatsuba (BigNum a){
+            BigNum min = min_size(this, &a);
+            BigNum max = max_size(this, &a);
+            BigNum A_0;
+            BigNum A_1;
+            BigNum B_0;
+            BigNum B_1;
+            int length = max.num.size_of_vector();
+            int length_min = min.num.size_of_vector();
+            if ((length < 3) || (length_min < 3)) return min * max;
+            for (int i = 0; i < length / 2; ++i) {
+                A_0.num.push_back(max.num[i]);
+                if (length_min > i) {
+                    B_0.num.push_back(min.num [i]);
+                 }
+            }
+            for (int i = length / 2; i < length; ++i) {
+                A_1.num.push_back(max.num[i]);
+                if (length_min > i) {
+                    B_1.num.push_back(min.num[i]);
+                 }
+            }
+            A_1.remove_null();
+            A_1.is_null();
+            A_0.remove_null();
+            A_0.is_null();
+            B_1.remove_null();
+            B_1.is_null();
+            B_0.remove_null();
+            B_0.is_null();
+            BigNum rad;
+            rad.num.push_back(0);
+            rad.num.push_back(1);
+            int t = length / 2;
+            rad = rad.power(t);
+            BigNum puisne = A_0.Karatsuba(B_0);
+            BigNum major = A_1.Karatsuba(B_1);
+            BigNum sum_1 = A_0 + A_1;
+            BigNum sum_2 = B_0 + B_1;
+            BigNum product_sum = sum_1.Karatsuba(sum_2);
+            BigNum med = product_sum - puisne;
+            med = med - major;
+            med = med.Karatsuba(rad);
+            rad = rad.power(2); // здесь нельзя применять метод Карацюбы:если один из множителей равен степени 10,
+                                //соответствующей "сдвигу", алгоритм зациклится (кажется, единственное опасное место)
+            major = major * rad;
+            BigNum answer = puisne + med + major;
+            answer.is_null();
+            return answer;
+        }
 
 
 #endif // BIGNUM_H

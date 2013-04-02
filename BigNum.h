@@ -883,4 +883,33 @@ using namespace std;
         }
 
 
+    // ЦЕЛАЯ ЧАСТЬ ОТ КВАДРАТНОГО КОРНЯ
+
+    BigNum BigNum::sqrt(){
+        BigNum null(0);
+        if (*this == null) {
+            return null;
+        }
+        Q_Num x;
+        BigNum y(*this);
+        BigNum sqr(1);
+        x.numerator = y;
+        x.denominator = sqr;
+        Q_Num buf;
+        buf.numerator = x.numerator.power(2) + *this * x.denominator.power(2);
+        buf.denominator = x.denominator * x.numerator * 2;
+        x = buf;
+        y = x.numerator / x.denominator;
+        sqr = y.power(2);
+        while (sqr > *this) {
+            buf.numerator = x.numerator.power(2) + *this * x.denominator.power(2);
+            buf.denominator = x.denominator * x.numerator * 2;
+            x = buf;
+            y = x.numerator / x.denominator;
+            sqr = y.power(2);
+        }
+        return y;
+    }
+
+
 #endif // BIGNUM_H

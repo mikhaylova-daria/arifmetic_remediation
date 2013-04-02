@@ -373,6 +373,14 @@ using namespace std;
      }
 
 
+    // АБСОЛЮТНОЕ ЗНАЧЕНИЕ
+    BigNum BigNum::abs() {
+        BigNum a(*this);
+        a.sign = true;
+        return a;
+    }
+
+
     //УДАЛЯЕТ НЕЗНАЧАЩИЕ НУЛИ. ЕСЛИ ВСЕ НУЛИ, ОСТАВЛЯЕТ ОДИН НОЛЬ
     void BigNum::remove_null(){
         int k = this->num.size_of_vector() - 1;
@@ -387,13 +395,14 @@ using namespace std;
     //ОБРАБОТКА НУЛЯ
 
     bool BigNum::is_null() {
+        bool answer = false;
         if (this->num.size_of_vector() == 1){
             if (this->num[0] == 0){
                 this->sign = true;
+                answer = true;
             }
-            return true;
         }
-        return false;
+        return answer;
     }
 
    //СЛОЖЕНИЕ
@@ -502,7 +511,6 @@ using namespace std;
         if (a.sign != this -> sign) {
             product.sign =false;
         }
-        product.num.push_back(0);
         BigNum max = max_size(this, &a);
         BigNum min = min_size(this, &a);
         int n = min.num.size_of_vector();
@@ -519,6 +527,20 @@ using namespace std;
         product.remove_null();
         product.is_null();
         return product;
+    }
+
+
+    //  ЦЕЛАЯ ЧАСТЬ ОТ ДЕЛЕНИЯ
+    BigNum BigNum::operator / (BigNum a){
+        BigNum x;
+        division(*this, a, x);
+        return x;
+    }
+
+// ОСТАТОК ОТ ДЕЛЕНИЯ
+    BigNum BigNum::operator % (BigNum a){
+        BigNum x;
+        return division(*this, a, x);
     }
 
 
@@ -627,6 +649,126 @@ using namespace std;
     }
 
 
+    //ДЕЛЕНИЕ ЧИСЕЛ ОДИНАКОВОЙ ИЛИ ОТЛИЧАЮЩЕЙСЯ НА 1 ДЛИНЫ (при попытки деления на 0 кидает строку "divide by 0")
+    BigNum division_of_numbers_similar_length__return_modulo(BigNum dividend, BigNum divider, SMALLNUM &quotient) {
+            long x;
+            int y;
+            if (divider.is_null()) {
+                throw ("divide by 0");
+                return divider;
+            }
+            BigNum intermediate;
+            BigNum modulo;
+            int dividend_size = dividend.num.size_of_vector();
+            int divider_size = divider.num.size_of_vector();
+            if (dividend_size == divider_size) {
+                x = dividend.num[dividend_size - 1];
+            }
+            if (dividend_size == divider_size + 1) {
+                x = dividend.num[dividend_size - 1] * radix + dividend.num[dividend_size - 2];
+            }
+            if (dividend_size < divider_size) {
+                quotient = 0;
+                return dividend;
+            }
+
+            y = divider.num[divider_size - 1];
+            quotient = x / y;
+            modulo = dividend - divider * quotient;
+            if (quotient > 0) {
+                BigNum null(0);
+                while ((modulo < null) && (quotient > 0)) {
+                    --quotient;
+                    intermediate = divider * quotient;
+                    modulo = dividend - intermediate;
+                }
+            }
+            modulo.is_null();
+            return modulo;
+        }
+
+//ДЕЛЕНИЕ ДЛИННОГО НА ДЛИННОЕ (при попытки деления на 0 кидает строку "divide by 0")
+
+    BigNum division(BigNum dividend, BigNum divider, BigNum &quotient) {//Возвращает остаток, при делении на null кидает строку "null"
+        BigNum one(1);
+        if (divider.is_null()) {
+            throw ("divide by 0");
+            return divider;
+        }
+        if (dividend.abs() < divider.abs()) {
+            quotient = null;
+            return dividend;
+        }
+        if (dividend == divider){
+            quotient = one;
+            return null;
+        }
+        BigNum old_hat;
+        BigNum new_hat;
+        BigNum result;
+        int current_num_of_quotient;
+        int size_of_quotient;
+        int size_dividend;
+        int size;
+        size = divider.num.size_of_vector();
+        size_dividend = dividend.num.size_of_vector();
+        int x = size_dividend;
+        for (int i = 0; i < size; ++i) {
+            old_hat.num.push_back(dividend.num[x - size + i]);
+        }
+        for (int i = 0; i < size; ++i) {
+             dividend.num.remove_top();
+             --size_dividend;
+        }
+        try {
+            new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider, current_num_of_quotient);
+        } catch (const char * caugh) {
+            throw(caugh);
+            return divider;
+        }
+
+        if (current_num_of_quotient == 0) {
+            old_hat.num.put_on_bot (dividend.num[size_dividend - 1]);          // если шапка не поделилась  на делитель, дописываем разряд
+            dividend.num.remove_top();
+            --size_dividend;
+            try{
+               new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider, current_num_of_quotient);//пробуем поделить снова
+            } catch (const char * caugh) {
+                throw(caugh);
+                return divider;
+            }
+        }
+        size_of_quotient = size_dividend + 1;    // количество цифр в частном = количество цифр в делимом без шапки +1 (учитываем шапку)
+        for (int i = 0; i < size_of_quotient; ++i) {
+            result.num.push_back(0);
+        }
+        result.num [size_of_quotient - 1] = current_num_of_quotient;  //записали наибольший разряд частного
+        int i;
+        for (i = size_of_quotient - 2; i>=0; --i) {
+            if (new_hat != null) {
+                new_hat.num.put_on_bot(dividend.num[size_dividend - 1]);          //перенесли следующий разряд
+            } else {
+                new_hat.num[0] = dividend.num[size_dividend - 1];
+            }
+            --size_dividend;
+            try {
+                new_hat =  division_of_numbers_similar_length__return_modulo(new_hat, divider, current_num_of_quotient);
+            } catch (const char * caugh) {
+                throw(caugh);
+                return divider;
+            }
+            result.num[i] = current_num_of_quotient;
+        }
+        quotient = result;
+        if (dividend.sign == divider.sign) {
+            quotient.sign = true;
+        } else {
+            quotient.sign = false;
+        }
+        quotient.is_null();
+        new_hat.is_null();
+        return new_hat;
+    }
 
 
 

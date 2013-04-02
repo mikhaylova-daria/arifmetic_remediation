@@ -12,7 +12,7 @@ int main()
     a.output();
     b.output();
    // c = a - b;
-    c = a * 7;
+    c = a / b;
     c.output();
     return 0;
 

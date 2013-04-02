@@ -73,6 +73,7 @@ public:
     BigNum power(BigNum);
     BigNum sqrt();          //целая часть от квадратного коряня
     bool is_null();  //убирает - у нуля,+ если число ноль - истина,  нет - ложь
+    BigNum abs();
     BigNum operator + (BigNum a);
     BigNum operator -(BigNum a);
     BigNum operator * (SMALLNUM a);

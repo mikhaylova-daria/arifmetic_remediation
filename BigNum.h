@@ -770,6 +770,61 @@ using namespace std;
         return new_hat;
     }
 
+  // МАЛЕНЬКАЯ СТЕПЕНЬ
+    BigNum BigNum::power(int n) {
+        BigNum product;
+        product.num.push_back(1);
+        BigNum x = *this;
+        bool flag = true;
+        while (flag) {
+            if (n % 2 == 1) {
+                product = product * x;
+
+            }
+            n = n / 2;
+            if (n > 0) {
+               x = (x * x);
+            } else {
+                flag = false;
+            }
+        }
+        return product;
+    }
+
+//  БОЛЬШАЯ СТЕПЕНЬ
+    BigNum BigNum::power(BigNum n) {
+        if (n.is_null()) {
+            return *this;
+        }
+        bool flag = true;
+        BigNum null(0);
+        if (n < null) {
+            cerr<<"Не умею возводить в отрицательную степень :(";
+            return null;
+        }
+        BigNum two(2);
+        BigNum one (1);
+        BigNum product;
+        product.num.push_back(1);
+        BigNum x(*this);
+        BigNum mod;
+        BigNum buf = n;
+        while (flag) {
+            mod = division(buf, two, buf);
+            if (mod == one) {
+                product = product * x;
+
+            }
+            if (buf > null) {
+               x = x * x;
+            } else {
+                flag = false;
+            }
+        }
+        return product;
+    }
+
+
 
 
 

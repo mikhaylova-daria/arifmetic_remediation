@@ -882,6 +882,17 @@ using namespace std;
             return answer;
         }
 
+    BigNum BigNum::Karats(BigNum a) {
+        BigNum answer = this->Karatsuba(a);
+        if (this->sign == a.sign) {
+            answer.sign = true;
+        } else {
+            answer.sign = false;
+        }
+        answer.is_null();
+        return answer;
+
+    }
 
     // ЦЕЛАЯ ЧАСТЬ ОТ КВАДРАТНОГО КОРНЯ
 

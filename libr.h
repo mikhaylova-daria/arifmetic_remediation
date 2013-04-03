@@ -54,6 +54,10 @@ class BigNum
 {
     my::vector<int> num;
     bool sign;
+    BigNum Karatsuba(BigNum a);
+    void remove_null ();
+    friend BigNum dif (BigNum, BigNum );
+    bool is_null();  //убирает - у нуля,+ если число ноль - истина,  нет - ложь
 public:
     BigNum();
     BigNum(const BigNum &a);
@@ -66,13 +70,11 @@ public:
     void foutput(FILE*);
     BigNum min_size (BigNum *a, BigNum *b);
     BigNum max_size (BigNum *a, BigNum *b);
-    void remove_null ();
-    BigNum Karatsuba(BigNum a);
-    friend BigNum dif (BigNum, BigNum );
+    BigNum Karats(BigNum a);
     BigNum power(int);
     BigNum power(BigNum);
     BigNum sqrt();          //целая часть от квадратного коряня
-    bool is_null();  //убирает - у нуля,+ если число ноль - истина,  нет - ложь
+
     BigNum abs();
     BigNum operator + (BigNum a);
     BigNum operator -(BigNum a);

@@ -12,7 +12,7 @@ int main()
     a.output();
     b.output();
    // c = a - b;
-    c = a.Karatsuba(b);
+    c = a.Karats(b);
     c.output();
     return 0;
 

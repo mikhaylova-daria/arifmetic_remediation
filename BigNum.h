@@ -544,7 +544,7 @@ using namespace std;
 
 
     //ДЕЛЕНИЕ ЧИСЕЛ ОДИНАКОВОЙ ИЛИ ОТЛИЧАЮЩЕЙСЯ НА 1 ДЛИНЫ (при попытки деления на 0 кидает строку "divide by 0")
-    BigNum division_of_numbers_similar_length__return_modulo (const BigNum  &dividend, const BigNum &divider, SMALLNUM &quotient) {
+    BigNum division_of_positive_numbers_with_singledigit_result (const BigNum  &dividend, const BigNum &divider, SMALLNUM &quotient) {
             long x;
             int y;
             BigNum zero(0);
@@ -629,7 +629,7 @@ using namespace std;
              --size_dividend;
         }
         try {
-            new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider_, current_num_of_quotient);
+            new_hat = division_of_positive_numbers_with_singledigit_result(old_hat, divider_, current_num_of_quotient);
         } catch (const char * caugh) {
             throw(caugh);
         }
@@ -639,7 +639,7 @@ using namespace std;
             dividend_.num.remove_top();
             --size_dividend;
             try{
-               new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider_, current_num_of_quotient);//пробуем поделить снова
+               new_hat = division_of_positive_numbers_with_singledigit_result(old_hat, divider_, current_num_of_quotient);//пробуем поделить снова
             } catch (const char * caugh) {
                 throw(caugh);
             }
@@ -658,7 +658,7 @@ using namespace std;
             }
             --size_dividend;
             try {
-                new_hat =  division_of_numbers_similar_length__return_modulo(new_hat, divider_, current_num_of_quotient);
+                new_hat = division_of_positive_numbers_with_singledigit_result(new_hat, divider_, current_num_of_quotient);
             } catch (const char * caugh) {
                 throw(caugh);
             }

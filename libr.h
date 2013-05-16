@@ -23,8 +23,7 @@
 #define X 10 //число, степенью которого является основание (только 10 )
 #define radix_size 1 //степень 10
 #define MAX_SIZE 1024
-#define SMALLNUM int
-
+typedef int SMALLNUM ;
 namespace  my {
 template <typename T> class vector;
 }
@@ -90,7 +89,7 @@ public:
     bool operator <= (const BigNum &a) const;
     bool operator > (const BigNum &a) const;
     bool operator < (const BigNum &a) const;
-    friend BigNum division_of_numbers_similar_length__return_modulo (const BigNum &dividend, const BigNum &divider, SMALLNUM &quotient);
+    friend BigNum division_of_positive_numbers_with_singledigit_result(const BigNum &dividend, const BigNum &divider, SMALLNUM &quotient);
     friend BigNum division(const BigNum &dividend, const BigNum &divider,  BigNum &quotient);// Возвращают остаток от деления (обе)!!!
 };
 struct Q_Num {

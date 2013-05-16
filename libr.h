@@ -24,6 +24,7 @@
 #define radix_size 1 //степень 10
 #define MAX_SIZE 1024
 #define SMALLNUM int
+
 namespace  my {
 template <typename T> class vector;
 }
@@ -38,16 +39,16 @@ public:
     vector (int _capacity);
     vector (vector const &a);
     ~vector();
-    int push_back (T const new_);
-    int put_on_bot (T const new_);//положить на "дно"
-    int size_of_vector();
-    void output ();
+    int push_back (T const & new_);
+    int put_on_bot (T const  &new_);//положить на "дно"
+    int size_of_vector() const;
+    void output () const;
     int remove_top(); //удаление последнего (того, что сверху
     T &operator [] (int pos);
     const T &operator [] (int pos) const;
     my::vector<T> &operator = (my::vector<T> const& a);
-    bool operator == (my::vector<T> const&a);
-    bool operator != (my::vector<T> const& a);
+    bool operator == (my::vector<T> const&a) const;
+    bool operator != (my::vector<T> const& a) const;
     };
 
 class BigNum
@@ -56,7 +57,7 @@ class BigNum
     bool sign;
     BigNum Karatsuba(BigNum a);
     void remove_null ();
-    friend BigNum dif (BigNum, BigNum );
+    friend BigNum dif (const BigNum &,const BigNum & );
     bool is_null();  //убирает - у нуля,+ если число ноль - истина,  нет - ложь
 public:
     BigNum();
@@ -65,33 +66,32 @@ public:
     ~BigNum();
     void input();
     void finput (FILE*);
-    void output();
-    void foutput();
-    void foutput(FILE*);
-    BigNum min_size (BigNum *a, BigNum *b);
-    BigNum max_size (BigNum *a, BigNum *b);
+    void output() const;
+    void foutput() const;
+    void foutput(FILE*) const;
+    BigNum min_size (const BigNum *a,const BigNum *b) const;
+    BigNum max_size (const BigNum *a, const BigNum *b) const;
     BigNum Karats(BigNum a);
     BigNum power(int);
     BigNum power(BigNum);
-    BigNum sqrt();          //целая часть от квадратного коряня
-
-    BigNum abs();
-    BigNum operator + (BigNum a);
-    BigNum operator -(BigNum a);
-    BigNum operator * (SMALLNUM a);
-    BigNum operator * (BigNum a);
-    BigNum operator / (SMALLNUM a);
-    BigNum operator / (BigNum a);
-    BigNum operator % (BigNum a);
-    void  operator = (BigNum a);
-    bool operator == (BigNum a);
-    bool operator != (BigNum a);
-    bool operator >= (BigNum a);
-    bool operator <= (BigNum a);
-    bool operator > (BigNum a);
-    bool operator < (BigNum a);
-    friend BigNum division_of_numbers_similar_length__return_modulo (BigNum dividend, BigNum divider, SMALLNUM &quotient);
-    friend BigNum division(BigNum dividend, BigNum divider, BigNum &quotient);// Возвращают остаток от деления (обе)!!!
+    BigNum sqrt() const;          //целая часть от квадратного коряня
+    BigNum abs() const;
+    BigNum operator + (const BigNum &a) const;
+    BigNum operator -(const BigNum &a) const;
+    BigNum operator * (const SMALLNUM  &a) const;
+    BigNum operator * (const BigNum &a) const;
+    BigNum operator / (const SMALLNUM &a) const;
+    BigNum operator / (const BigNum &a) const;
+    BigNum operator % (const BigNum &a) const;
+    void  operator = (const BigNum &a);
+    bool operator == (const BigNum &a)const;
+    bool operator != (const BigNum &a) const;
+    bool operator >= (const BigNum &a) const;
+    bool operator <= (const BigNum &a) const;
+    bool operator > (const BigNum &a) const;
+    bool operator < (const BigNum &a) const;
+    friend BigNum division_of_numbers_similar_length__return_modulo (const BigNum &dividend, const BigNum &divider, SMALLNUM &quotient);
+    friend BigNum division(const BigNum &dividend, const BigNum &divider,  BigNum &quotient);// Возвращают остаток от деления (обе)!!!
 };
 struct Q_Num {
     BigNum numerator;

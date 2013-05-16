@@ -8,9 +8,9 @@ using namespace std;
     try {
         p_vector = static_cast <T*> (::operator new (sizeof(T) * capacity));
             new(p_vector)T();
-    } catch(std::bad_alloc) {
+    } catch(std::bad_alloc &ex) {
         std::cerr<<"Ошибка при выделении памяти"<<std::endl;
-        throw (1);
+        throw (ex);
     }
     }
 
@@ -32,6 +32,7 @@ using namespace std;
             new (p_vector + i) T();
         }
     }
+
     template <typename T>
     my::vector<T>::vector (my::vector<T> const &a) : size(a.size), capacity(a.capacity) {
         p_vector = static_cast <T*> (::operator new (sizeof(T) * capacity));
@@ -48,34 +49,31 @@ using namespace std;
         delete[] (p_vector);
     }
     template <typename T>
-    int my::vector<T>::push_back (T const new_){ //0 -успешное завершение, 1- неуспешное
+    int my::vector<T>::push_back (T const & new_){ //0 -успешное завершение, 1- неуспешное
         if (size == capacity) {
             T* placementMemory;
             try{
                 placementMemory = static_cast <T*> (::operator new (sizeof(T) * capacity * 2));
             } catch (std::bad_alloc& ba) {
                  std::cerr << "bad_alloc caught: " << ba.what() << '\n';
-                 return 1;
+                 throw(ba);
             }
             for (int i = 0; i < capacity; ++i) {
                  new (placementMemory+i) T(p_vector[i]) ;
                  p_vector[i].~T();
             }
             delete[] (p_vector);
-            for (int i = capacity; i < 2 * capacity; ++i) {
-                     new (placementMemory+i) T();
-            }
             p_vector = placementMemory;
             capacity *= 2;
         }
-        p_vector[size] = new_;
+        new (p_vector + size) T(new_) ;
         ++size;
         return 0;
     }
 
 
     template <typename T>
-    int my::vector<T>::put_on_bot (T const new_){
+    int my::vector<T>::put_on_bot (T const & new_){
         int _size =  this->size_of_vector() + 1;
         my::vector<T> buf(_size);
         buf.push_back(new_);
@@ -88,12 +86,12 @@ using namespace std;
 
 
     template <typename T>
-    int my::vector<T>::size_of_vector(){
+    int my::vector<T>::size_of_vector() const{
         return size;
     }
 
     template <typename T>
-    void my::vector<T>::output ()
+    void my::vector<T>::output () const
     {
         for (int i=0; i < size; ++i) {
             std::cout<<p_vector[i]<<" ";
@@ -103,11 +101,10 @@ using namespace std;
     }
 
     template <typename T>
-    T& my::vector<T>::operator [] (int pos) {
+    T& my::vector<T>::operator [] (int pos)  {
         if (pos >= size) {
             std::cerr<<"Не существует элемента с указанным номером!!!"<<pos<<std::endl;//Кидает строчку ,bad_index
             throw ("bad_index");
-            return p_vector[0];
         }
         return p_vector[pos];
     }
@@ -117,7 +114,6 @@ using namespace std;
         if (pos >= size) {
             std::cerr<<"Не существует элемента с указанным номером!!!"<<std::endl;//Кидает строчку ,bad_index
             throw ("bad_index");
-            return p_vector[0];
         }
         return p_vector[pos];
     }
@@ -135,7 +131,7 @@ using namespace std;
     }
 
     template <typename T>
-    bool my::vector<T>::operator == (my::vector<T> const&a) {
+    bool my::vector<T>::operator == (my::vector<T> const&a) const{
         if (a.size == this -> size) {
             int i = 0;
             while (i < a.size) {
@@ -151,9 +147,10 @@ using namespace std;
     }
 
     template <typename T>
-    bool my::vector<T>::operator != (my::vector<T> const& a) {
+    bool my::vector<T>::operator != (my::vector<T> const& a) const {
         return (!(*this == a));
     }
 
 
 #endif // VECTOR_H
+

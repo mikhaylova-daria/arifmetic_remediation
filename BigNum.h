@@ -3,7 +3,7 @@
 using namespace std;
 
 
-//КОНСТРУКТОР ПО УМОЛЧАНИЮ
+  //КОНСТРУКТОР ПО УМОЛЧАНИЮ
     BigNum::BigNum(): sign(true){
     }
 
@@ -44,90 +44,27 @@ using namespace std;
         std::cin>>c;
         if (c == '-'){
             this->sign = false;
-            cin>>c;
+            std::cin>>c;
         } else {
             this -> sign = true;
         }
-        while (c == '0'){    // пропускает незначащие нули, введённые пользователем
-            std::cin>> c;
+        while (c == '0' && std::cin>> c){    // пропускает незначащие нули, введённые пользователем
         }
-        if (c == '!') {
-            this->num.push_back(0);
-            free (buf);
-            return;
+        if ('0' <= c && c <= '9') {
+            buf[i] = c - '0';
+            ++i;
         }
-        switch (c) {
-            case '1': buf[i] = 1;
+
+        while (std::cin>>c)
+        {
+            if ('0' <= c && c <= '9') {
+                buf[i] = c - '0';
                 ++i;
-                break;
-            case '2': buf[i] = 2;
-                ++i;
-                break;
-            case '3': buf[i] = 3;
-                ++i;
-                break;
-            case '4': buf[i] = 4;
-                ++i;
-                break;
-            case '5': buf[i] = 5;
-                ++i;
-                break;
-            case '6': buf[i] = 6;
-                ++i;
-                break;
-            case '7': buf[i] = 7;
-                ++i;
-                break;
-            case '8': buf[i] = 8;
-                ++i;
-                break;
-            case '9': buf[i] = 9;
-                ++i;
-                break;
-            }
-        bool flag = true;
-        while (flag){
-            std::cin>>c;
-            switch (c) {
-            case '1': buf[i] = 1;
-                ++i;
-                break;
-            case '2': buf[i] = 2;
-                ++i;
-                break;
-            case '3': buf[i] = 3;
-                ++i;
-                break;
-            case '4': buf[i] = 4;
-                ++i;
-                break;
-            case '5': buf[i] = 5;
-                ++i;
-                break;
-            case '6': buf[i] = 6;
-                ++i;
-                break;
-            case '7': buf[i] = 7;
-                ++i;
-                break;
-            case '8': buf[i] = 8;
-                ++i;
-                break;
-            case '9': buf[i] = 9;
-                ++i;
-                break;
-            case '0': buf[i] = 0;
-                ++i;
-                break;
-            case '!': flag = false;
-                ++i;
-                break;
             }
             if ( i == cap_buf) {
                 buf = (short*) realloc(buf, cap_buf * 2 * sizeof(short));
             }
         }
-        --i;//сейчас ровно столько, сколько цифр в числе
         int length_of_tail = i % radix_size;
         int x;
         for (int j = i-1; j >= length_of_tail; j-= radix_size) {
@@ -138,7 +75,7 @@ using namespace std;
             this->num.push_back(x);
         }
         x = 0;
-        for (int j = 0; j < length_of_tail; ++j){		//Работает
+        for (int j = 0; j < length_of_tail; ++j){
             x += (pow((float)X, (int) (length_of_tail -j-1)) * buf[j]);
         }
             if (x != 0) {
@@ -176,72 +113,18 @@ using namespace std;
             free (buf);
             return;
         }
-        switch (c) {
-            case '1': buf[i] = 1;
-                ++i;
-                break;
-            case '2': buf[i] = 2;
-                ++i;
-                break;
-            case '3': buf[i] = 3;
-                ++i;
-                break;
-            case '4': buf[i] = 4;
-                ++i;
-                break;
-            case '5': buf[i] = 5;
-                ++i;
-                break;
-            case '6': buf[i] = 6;
-                ++i;
-                break;
-            case '7': buf[i] = 7;
-                ++i;
-                break;
-            case '8': buf[i] = 8;
-                ++i;
-                break;
-            case '9': buf[i] = 9;
-                ++i;
-                break;
-            }
+        if ('0' <= c && c <= '9') {
+            buf[i] = c - '0';
+            ++i;
+        }
         bool flag = true;
         while (flag){
             fscanf(fp,"%c", &c);
+            if ('0' <= c && c <= '9') {
+                buf[i] = c - '0';
+                ++i;
+            }
             switch (c) {
-            case '1': buf[i] = 1;
-                ++i;
-                break;
-            case '2': buf[i] = 2;
-                ++i;
-                break;
-            case '3': buf[i] = 3;
-                ++i;
-                break;
-            case '4': buf[i] = 4;
-                ++i;
-                break;
-            case '5': buf[i] = 5;
-                ++i;
-                break;
-            case '6': buf[i] = 6;
-                ++i;
-                break;
-            case '7': buf[i] = 7;
-                ++i;
-                break;
-            case '8': buf[i] = 8;
-                ++i;
-                break;
-            case '9': buf[i] = 9;
-                ++i;
-                break;
-            case '0': buf[i] = 0;
-                ++i;
-                break;
-            case ' ': flag = false;
-                ++i;
-                break;
             case EOF: flag = false;
                 ++i;
                 break;
@@ -283,7 +166,7 @@ using namespace std;
     }
 
     // ВЫВОД В КОНСОЛЬ
-    void BigNum::output() {
+    void BigNum::output() const{
         if (this->sign == false) {
             std::cout<<'-';
         }
@@ -307,7 +190,7 @@ using namespace std;
 
 
     //ВЫВОД В ФАЙЛ - СОЗДАЁТ, ОТКРЫВАЕТ, ЗАКРЫВАЕТ
-    void BigNum::foutput() {
+    void BigNum::foutput() const{
         FILE * p = fopen ("OUTPUT.TXT", "w+");
         int size_of_vector = this->num.size_of_vector();
         for (int i = size_of_vector - 1; i >= 0; --i) {
@@ -328,7 +211,7 @@ using namespace std;
     }
 
     //ВЫВОД В ФАЙЛ, НЕ ЗАКРЫВАЕТ
-    void BigNum::foutput(FILE*  fp) {
+    void BigNum::foutput(FILE*  fp) const {
         int size_of_vector = this->num.size_of_vector();
         for (int i = size_of_vector - 1; i >= 0; --i) {
             int w = radix / X;
@@ -347,7 +230,7 @@ using namespace std;
     }
 
     //ВОЗВРАЩАЕТ МИНИМУМ ПО МОДУЛЮ
-    BigNum BigNum::min_size (BigNum *_a, BigNum *_b) {
+    BigNum BigNum::min_size (const BigNum *_a, const BigNum *_b) const {
         BigNum a(*_a);
         BigNum b(*_b);
         a.sign = true;
@@ -360,7 +243,7 @@ using namespace std;
     }
 
     //ВОЗВРАЩАЕТ МАКСИМУМ ПО МОДУЛЮ
-    BigNum BigNum::max_size (BigNum *_a, BigNum *_b) {   // по модулю!!!!!!
+    BigNum BigNum::max_size (const BigNum *_a, const BigNum *_b) const {   // по модулю!!!!!!
         BigNum a (*_a);
         BigNum b(*_b);
         a.sign = true;
@@ -374,7 +257,7 @@ using namespace std;
 
 
     // АБСОЛЮТНОЕ ЗНАЧЕНИЕ
-    BigNum BigNum::abs() {
+    BigNum BigNum::abs() const{
         BigNum a(*this);
         a.sign = true;
         return a;
@@ -382,7 +265,7 @@ using namespace std;
 
 
     //УДАЛЯЕТ НЕЗНАЧАЩИЕ НУЛИ. ЕСЛИ ВСЕ НУЛИ, ОСТАВЛЯЕТ ОДИН НОЛЬ
-    void BigNum::remove_null(){
+    void BigNum::remove_null() {
         int k = this->num.size_of_vector() - 1;
         while ((this->num[k] == 0)&& (k > 0)) {
             this->num.remove_top();
@@ -394,7 +277,7 @@ using namespace std;
 
     //ОБРАБОТКА НУЛЯ
 
-    bool BigNum::is_null() {
+    bool BigNum::is_null(){
         bool answer = false;
         int this_size = this->num.size_of_vector();
         if (this_size == 1){
@@ -412,7 +295,7 @@ using namespace std;
     }
 
    //СЛОЖЕНИЕ
-    BigNum  BigNum::operator + (BigNum a) {
+    BigNum  BigNum::operator + (const BigNum &a) const {
         BigNum min_abs = min_size (this, &a); // минимальный по модулю
         BigNum max_abs = max_size(this, &a);// максимальный по модулю
         int min = min_abs.num.size_of_vector();
@@ -450,7 +333,9 @@ using namespace std;
     }
 
     //  РАЗНИЦА В АБСОЛЮТНЫХ ЗНАЧЕНИЯХ
-    BigNum dif (BigNum max, BigNum min) {
+    BigNum dif (const BigNum & _max, const BigNum & _min)  {
+        BigNum max (_max);
+        BigNum min (_min);
         BigNum difference;
         int j = min.num.size_of_vector();
         for (int i = 0; i < j; ++i) {
@@ -481,16 +366,17 @@ using namespace std;
 
     //  ВЫЧИТАНИЕ
 
-    BigNum BigNum::operator - (BigNum a) {
+    BigNum BigNum::operator - (const BigNum &a) const{
             BigNum difference;
-            a.sign = !(a.sign);
-            difference = *this + a;
+            BigNum _a(a);
+            _a.sign = !(a.sign);
+            difference = *this + _a;
             difference.is_null();
         return difference;
     }
 
     //  УМНОЖЕНИЕ НА НЕБОЛЬШОЕ
-    BigNum BigNum::operator * (SMALLNUM a){
+    BigNum BigNum::operator * (const SMALLNUM &a) const{
 
         BigNum product;
         if (this->sign == false){
@@ -507,16 +393,15 @@ using namespace std;
             product.num.push_back(buf);
         }
         product.remove_null();
+        if (a < 0) product.sign = (!product.sign);
         product.is_null();
         return product;
     }
 
 //УМНОЖЕНИЕ НА ДЛИННОЕ
-    BigNum BigNum::operator * (BigNum a) {
+    BigNum BigNum::operator * (const BigNum &a) const {
         BigNum product;
-        if (a.sign != this -> sign) {
-            product.sign =false;
-        }
+
         BigNum max = max_size(this, &a);
         BigNum min = min_size(this, &a);
         int n = min.num.size_of_vector();
@@ -530,6 +415,9 @@ using namespace std;
             }
             product = product + x;
         }
+        if (a.sign != this -> sign) {
+            product.sign =false;
+        }
         product.remove_null();
         product.is_null();
         return product;
@@ -537,14 +425,14 @@ using namespace std;
 
 
     //  ЦЕЛАЯ ЧАСТЬ ОТ ДЕЛЕНИЯ
-    BigNum BigNum::operator / (BigNum a){
+    BigNum BigNum::operator / (const BigNum &a) const{
         BigNum x;
         division(*this, a, x);
         return x;
     }
 
 // ОСТАТОК ОТ ДЕЛЕНИЯ
-    BigNum BigNum::operator % (BigNum a){
+    BigNum BigNum::operator % (const BigNum& a) const{
         BigNum x;
         return division(*this, a, x);
     }
@@ -552,7 +440,7 @@ using namespace std;
 
   // ОПЕРАТОР ПРИСВАИВАНИЯ
 
-    void BigNum::operator = (BigNum a){
+    void BigNum::operator = (const BigNum& a){
         this->sign = a.sign;
         this->num = a.num;
         return;
@@ -560,7 +448,7 @@ using namespace std;
 
     //      РАВНО
 
-    bool BigNum::operator == (BigNum a){
+    bool BigNum::operator == (const BigNum &a) const{
         if (a.sign == this->sign) {
             if (a.num == this->num) {
                 return true;
@@ -572,13 +460,13 @@ using namespace std;
         }
     }
 
-    bool BigNum::operator != (BigNum a) {
+    bool BigNum::operator != (const BigNum &a) const {
         return (!(a == *this));
     }
 
    //            БОЛЬШЕ ИЛИ РАВНО
 
-    bool BigNum::operator >= (BigNum a) {
+    bool BigNum::operator >= (const BigNum &a) const {
         if (a == *this) {
             return true;
         }
@@ -612,7 +500,7 @@ using namespace std;
 
 
  //            МЕНЬШЕ ИЛИ РАВНО
-    bool BigNum::operator <= (BigNum a){
+    bool BigNum::operator <= (const BigNum &a) const{
         if (a == *this) {
             return true;
         }
@@ -645,23 +533,23 @@ using namespace std;
     }
 
 //            БОЛЬШЕ
-    bool BigNum::operator > (BigNum a) {
+    bool BigNum::operator > (const BigNum &a) const{
         return (!(this->operator <= (a)));
     }
 
 //           МЕНЬШЕ
-    bool BigNum::operator < (BigNum a) {
+    bool BigNum::operator < (const BigNum &a) const{
         return (!(this->operator >= (a)));
     }
 
 
     //ДЕЛЕНИЕ ЧИСЕЛ ОДИНАКОВОЙ ИЛИ ОТЛИЧАЮЩЕЙСЯ НА 1 ДЛИНЫ (при попытки деления на 0 кидает строку "divide by 0")
-    BigNum division_of_numbers_similar_length__return_modulo(BigNum dividend, BigNum divider, SMALLNUM &quotient) {
+    BigNum division_of_numbers_similar_length__return_modulo (const BigNum  &dividend, const BigNum &divider, SMALLNUM &quotient) {
             long x;
             int y;
-            if (divider.is_null()) {
+            BigNum zero(0);
+            if (divider == zero) {
                 throw ("divide by 0");
-                return divider;
             }
             BigNum intermediate;
             BigNum modulo;
@@ -695,20 +583,34 @@ using namespace std;
 
 //ДЕЛЕНИЕ ДЛИННОГО НА ДЛИННОЕ (при попытки деления на 0 кидает строку "divide by 0")
 
-    BigNum division(BigNum dividend, BigNum divider, BigNum &quotient) {//Возвращает остаток, при делении на null кидает строку "null"
+    BigNum division(const BigNum & dividend, const BigNum &divider, BigNum &quotient) {//Возвращает остаток, при делении на null кидает строку "null"
         BigNum one(1);
-        if (divider.is_null()) {
+        BigNum zero(0);
+        if (divider == zero) {
             throw ("divide by 0");
-            return divider;
         }
         if (dividend.abs() < divider.abs()) {
             quotient = null;
-            return dividend;
+            if (divider.sign == true) {
+                return dividend;
+            } else {
+                if (dividend.sign == true){
+                    return divider + dividend;
+                } else {
+                    return (divider - dividend).abs();
+                }
+            }
         }
-        if (dividend == divider){
-            quotient = one;
+        bool sign = (divider.sign && dividend.sign || (!divider.sign) && (!dividend.sign));
+        BigNum dividend_ = dividend.abs();
+        BigNum divider_ = divider.abs();
+
+        if (dividend_ == divider_){
+            quotient.num = one.num;
+            quotient.sign = sign;
             return null;
         }
+
         BigNum old_hat;
         BigNum new_hat;
         BigNum result;
@@ -716,32 +618,30 @@ using namespace std;
         int size_of_quotient;
         int size_dividend;
         int size;
-        size = divider.num.size_of_vector();
-        size_dividend = dividend.num.size_of_vector();
+        size = divider_.num.size_of_vector();
+        size_dividend = dividend_.num.size_of_vector();
         int x = size_dividend;
         for (int i = 0; i < size; ++i) {
-            old_hat.num.push_back(dividend.num[x - size + i]);
+            old_hat.num.push_back(dividend_.num[x - size + i]);
         }
         for (int i = 0; i < size; ++i) {
-             dividend.num.remove_top();
+             dividend_.num.remove_top();
              --size_dividend;
         }
         try {
-            new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider, current_num_of_quotient);
+            new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider_, current_num_of_quotient);
         } catch (const char * caugh) {
             throw(caugh);
-            return divider;
         }
 
         if (current_num_of_quotient == 0) {
-            old_hat.num.put_on_bot (dividend.num[size_dividend - 1]);          // если шапка не поделилась  на делитель, дописываем разряд
-            dividend.num.remove_top();
+            old_hat.num.put_on_bot (dividend_.num[size_dividend - 1]);          // если шапка не поделилась на делитель, дописываем разряд
+            dividend_.num.remove_top();
             --size_dividend;
             try{
-               new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider, current_num_of_quotient);//пробуем поделить снова
+               new_hat = division_of_numbers_similar_length__return_modulo(old_hat, divider_, current_num_of_quotient);//пробуем поделить снова
             } catch (const char * caugh) {
                 throw(caugh);
-                return divider;
             }
         }
         size_of_quotient = size_dividend + 1;    // количество цифр в частном = количество цифр в делимом без шапки +1 (учитываем шапку)
@@ -752,28 +652,33 @@ using namespace std;
         int i;
         for (i = size_of_quotient - 2; i>=0; --i) {
             if (new_hat != null) {
-                new_hat.num.put_on_bot(dividend.num[size_dividend - 1]);          //перенесли следующий разряд
+                new_hat.num.put_on_bot(dividend_.num[size_dividend - 1]);          //перенесли следующий разряд
             } else {
-                new_hat.num[0] = dividend.num[size_dividend - 1];
+                new_hat.num[0] = dividend_.num[size_dividend - 1];
             }
             --size_dividend;
             try {
-                new_hat =  division_of_numbers_similar_length__return_modulo(new_hat, divider, current_num_of_quotient);
+                new_hat =  division_of_numbers_similar_length__return_modulo(new_hat, divider_, current_num_of_quotient);
             } catch (const char * caugh) {
                 throw(caugh);
-                return divider;
             }
             result.num[i] = current_num_of_quotient;
         }
         quotient = result;
-        if (dividend.sign == divider.sign) {
-            quotient.sign = true;
-        } else {
-            quotient.sign = false;
-        }
+        quotient.sign = sign;
         quotient.is_null();
         new_hat.is_null();
-        return new_hat;
+        new_hat.sign = dividend.sign;
+        if (divider.sign == true
+                ) {
+            return new_hat;
+        } else {
+            if (new_hat.sign == true){
+                return divider + new_hat;
+            } else {
+                return (divider - new_hat).abs();
+            }
+        }
     }
 
   // МАЛЕНЬКАЯ СТЕПЕНЬ
@@ -896,30 +801,23 @@ using namespace std;
 
     // ЦЕЛАЯ ЧАСТЬ ОТ КВАДРАТНОГО КОРНЯ
 
-    BigNum BigNum::sqrt(){
+    BigNum BigNum::sqrt() const{
         BigNum null(0);
         if (*this == null) {
-            return null;
+               return null;
         }
-        Q_Num x;
-        BigNum y(*this);
-        BigNum sqr(1);
-        x.numerator = y;
-        x.denominator = sqr;
-        Q_Num buf;
-        buf.numerator = x.numerator.power(2) + *this * x.denominator.power(2);
-        buf.denominator = x.denominator * x.numerator * 2;
-        x = buf;
-        y = x.numerator / x.denominator;
-        sqr = y.power(2);
-        while (sqr > *this) {
-            buf.numerator = x.numerator.power(2) + *this * x.denominator.power(2);
-            buf.denominator = x.denominator * x.numerator * 2;
-            x = buf;
-            y = x.numerator / x.denominator;
-            sqr = y.power(2);
+        if (this -> sign == false) {
+               throw ("bad_sqrt");
         }
-        return y;
+        BigNum  buf (*this);
+        BigNum rslt(*this);
+        BigNum div (*this);
+        while (buf != 0)
+        {
+             div = (buf / div + div) / BigNum (2);
+             if (rslt > div) rslt = div;
+                  else return rslt;
+             }
     }
 
 
